@@ -1,4 +1,5 @@
 var loggly = require('loggly');
+var bunyan = require('bunyan');
 
 function Bunyan2Loggly(logglyConfig, bufferLength, bufferTimeout){
     if(!logglyConfig || !logglyConfig.token || !logglyConfig.subdomain){
@@ -25,6 +26,9 @@ Bunyan2Loggly.prototype.write = function(data){
         data.timestamp = data.time;
         delete data.time;
     }
+
+    // Add level as string
+    data.level = bunyan.nameFromLevel[data.level];
 
     this._buffer.push(data);
 
